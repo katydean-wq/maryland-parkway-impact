@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maryland Parkway Construction Impact Analysis</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{
+  --ink:#0e1726; --muted:#5b6473; --line:#e5e8ee; --bg:#fafbfc;
+  --accent:#0b69ff; --good:#0e8a4a; --bad:#c4302b; --warn:#b25a00;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:linear-gradient(180deg,#fff,#fff 70%,transparent);padding:48px 24px 24px;border-bottom:1px solid var(--line)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:36px;line-height:1.15;margin:6px 0 8px;letter-spacing:-.02em}
+h2{font-size:22px;margin:36px 0 12px;letter-spacing:-.01em}
+h3{font-size:15px;margin:0 0 8px;color:var(--muted);font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+p{margin:0 0 12px;color:#1f2937;font-size:15px}
+.lede{font-size:18px;color:#1f2937;max-width:780px}
+section{padding:32px 0;border-bottom:1px solid var(--line)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.kpi .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.kpi .value{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+.kpi .delta{font-size:13px;margin-top:4px;font-weight:500}
+.kpi.bad .value{color:var(--bad)} .kpi.good .value{color:var(--good)} .kpi.warn .value{color:var(--warn)}
+.delta.neg{color:var(--bad)} .delta.pos{color:var(--good)}
+.chart{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:14px}
+.caption{font-size:13px;color:var(--muted);margin-top:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl th,.tbl td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line)}
+.tbl th{background:#f3f5f9;font-weight:600;text-align:left}
+.tbl td:first-child,.tbl th:first-child{text-align:left}
+.tbl tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:11px;padding:3px 9px;border-radius:999px;background:#eef3ff;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.pill.bad{background:#fdecec;color:var(--bad)}
+.pill.good{background:#e6f5ec;color:var(--good)}
+.pill.warn{background:#fff4e0;color:var(--warn)}
+.callout{background:#fff;border-left:4px solid var(--accent);padding:14px 18px;margin:14px 0;border-radius:0 8px 8px 0;box-shadow:0 1px 0 var(--line)}
+.callout.bad{border-left-color:var(--bad)} .callout.good{border-left-color:var(--good)} .callout.warn{border-left-color:var(--warn)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+@media (max-width:760px){.grid-2{grid-template-columns:1fr}.kpi .value{font-size:24px}h1{font-size:28px}}
+.foot{padding:24px;color:var(--muted);font-size:12px;text-align:center;background:#fff;border-top:1px solid var(--line)}
+.tab-buttons{display:flex;gap:6px;margin:14px 0 0;flex-wrap:wrap}
+.tab-buttons button{background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--ink);font-weight:500}
+.tab-buttons button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+  <div class="eyebrow">Executive Briefing · prepared May 31, 2026</div>
+  <h1>Maryland Parkway construction impact — where we stand and what happens when it ends</h1>
+  <p class="lede">Construction on the RTC's Maryland Parkway BRT project is a real factor in our 2025–2026 sales loss at the Maryland Parkway venue — but it explains less of the decline than it might appear, and we should not expect a full recovery when construction concludes in Fall 2026.</p>
+</div>
+</header>
+
+<section><div class="container">
+  <h3>At a Glance</h3>
+  <div class="kpi-grid">
+    <div class="kpi bad">
+      <div class="label">MP Sales (current vs. pre-construction)</div>
+      <div class="value">−66%</div>
+      <div class="delta neg">$29.9k → $10.1k / week</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">vs. peer benchmark locations</div>
+      <div class="value">−24%</div>
+      <div class="delta neg">Underperforming since May 2025</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Plaza Foot Traffic</div>
+      <div class="value">~Flat</div>
+      <div class="delta">14–15k visits / week, steady</div>
+    </div>
+    <div class="kpi bad">
+      <div class="label">MP capture rate ($/1k visits)</div>
+      <div class="value">−57%</div>
+      <div class="delta neg">$1,696 → $725 per 1k visits</div>
+    </div>
+    <div class="kpi bad">
+      <div class="label">Search Console impressions</div>
+      <div class="value">−83%</div>
+      <div class="delta neg">28k → 5k / wk (brand awareness collapse)</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Construction end (RTC schedule)</div>
+      <div class="value">Fall '26</div>
+      <div class="delta">Estimated by RTC, subject to change</div>
+    </div>
+  </div>
+
+  <div class="callout warn" style="margin-top:18px">
+    <strong>Bottom line.</strong> Plaza foot traffic is roughly stable — customers are still in the area. The dramatic sales drop is driven by collapsing <em>capture rate</em>: MP captures 57% fewer dollars per plaza visitor than at the height of construction summer 2025. This is a brand/awareness/consideration problem at least as much as it is an access problem, and the trend is still deepening. Even an optimistic post-construction recovery projects sales settling around <strong>$21k/wk — still 29% below pre-construction baseline.</strong>
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>How the sales loss decomposes</h2>
+  <p>We separated the decline into three sources, using the Placer.ai foot-traffic data for Sunrise City Plaza (which contains the venue) and our peer benchmark (the average index of 8 long-running Escapology locations).</p>
+
+  <div class="grid-2">
+    <div class="chart"><div id="chart-decomp" style="height:340px"></div>
+      <div class="caption">Plaza visits had a 17%/yr decline from 2023 → 2024 with no construction. Construction added another ~7 percentage points of decline in 2025. The plaza is losing traffic for non-construction reasons too.</div>
+    </div>
+    <div>
+      <table class="tbl">
+        <thead><tr><th>Year</th><th>Plaza visits</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2023</td><td>1,225,603</td><td>—</td></tr>
+          <tr><td>2024</td><td>1,015,207</td><td class="pill bad" style="font-size:11px">−17.2%</td></tr>
+          <tr><td>2025 expected (if 2024 trend held)</td><td>840,591</td><td class="pill warn">−17.2% pp baseline</td></tr>
+          <tr><td>2025 actual</td><td>779,970</td><td class="pill bad">−23.2% total</td></tr>
+        </tbody>
+      </table>
+      <div class="callout bad" style="margin-top:10px">
+        Of the 23.2% YoY decline in plaza visits in 2025, <strong>~17 percentage points are pre-existing secular decline</strong> and <strong>only ~7 points are attributable to construction.</strong>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>Weekly sales: MP vs. peer benchmark</h2>
+  <p>Our peer benchmark — the indexed average of 8 long-running locations (DES, FTL, NR, ORL, PF, ST, SW, TS) — controls for brand-wide seasonality, marketing changes, and post-COVID recovery patterns. MP tracked the benchmark almost exactly through May 2025, then diverged sharply and has stayed below.</p>
+  <div class="chart"><div id="chart-sales" style="height:420px"></div></div>
+  <div class="callout">
+    <strong>Structural break detected at week of May 19, 2025</strong> by single change-point analysis. Pre-break MP-vs-benchmark gap: +0.5%. Post-break: −32%. This date corresponds to the RTC's "Adjacent Project Marathon Closure" at Tropicana / Maryland Pkwy that same week.
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>The smoking gun: capture rate collapse</h2>
+  <p>If construction simply reduced foot traffic, we'd expect sales and visits to fall together. They didn't. Plaza visits have been roughly flat at 14–15k/week throughout the construction period. MP sales-per-1,000-plaza-visits has fallen 57% — meaning a smaller and smaller share of the people coming to the plaza are choosing Escapology.</p>
+  <div class="chart"><div id="chart-capture" style="height:380px"></div>
+    <div class="caption">MP sales (left axis, $/week) vs. plaza visits (right axis, count/week). Sales fall and stay low; visits do not.</div>
+  </div>
+  <div class="grid-2" style="margin-top:14px">
+    <div class="chart"><div id="chart-capture-rate" style="height:340px"></div>
+      <div class="caption">$ MP sales per 1,000 plaza visitors. The capture rate has fallen progressively, with the steepest drop in Q1–Q2 2026 as construction work moved closer to the venue.</div>
+    </div>
+    <div class="chart"><div id="chart-web" style="height:340px"></div>
+      <div class="caption">Search Console impressions for the MP location pages have collapsed 83% from Q1 2025 to Q2 2026 — people are searching for us less often.</div>
+    </div>
+  </div>
+  <div class="callout bad">
+    <strong>This is the central finding.</strong> The plaza is still drawing customers, but they are not coming to Escapology. Combined with the 83% drop in search impressions and a steep decline in GA4 sessions, this looks less like a "can't physically get there" problem and more like a <strong>"forgot about it / stopped considering it"</strong> problem. Construction may have triggered it, but the disengagement is now its own dynamic.
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>Construction intensity vs. sales</h2>
+  <p>We extracted 462 construction events from the RTC's 96 weekly project update PDFs (Aug 2024 – May 2026), geocoded every cross-street, and built a weekly intensity score for the venue's segment of the corridor (distance-decayed: nearby work counts more than far-away work).</p>
+  <div class="chart"><div id="chart-intensity" style="height:380px"></div>
+    <div class="caption">Weekly construction intensity (right axis) with MP weekly sales (left axis). Note: the sales collapse continues even as nearby construction intensity falls — supporting the behavioral-fatigue interpretation.</div>
+  </div>
+  <div class="grid-2" style="margin-top:14px">
+    <div class="chart"><div id="chart-intensity-prox" style="height:340px"></div>
+      <div class="caption">Intensity broken out by proximity to the venue. Most early work was 1–2+ miles away (Tropicana, downtown). Work moved within 0.5 mi of the venue in late 2025 / early 2026.</div>
+    </div>
+    <div class="chart"><div id="chart-cumulative" style="height:340px"></div>
+      <div class="caption">Cumulative construction intensity since August 2024. The cumulative measure captures customer fatigue better than current-week intensity.</div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>Quarterly summary</h2>
+  <table class="tbl" id="qtbl">
+    <thead><tr>
+      <th>Quarter</th>
+      <th>MP Sales ($/wk)</th>
+      <th>Bench ($/wk)</th>
+      <th>MP vs Bench</th>
+      <th>Plaza Visits</th>
+      <th>GA4 Sessions</th>
+      <th>Capture ($/1k vis)</th>
+      <th>Constr. Intensity</th>
+    </tr></thead>
+    <tbody id="qtbody"></tbody>
+  </table>
+</div></section>
+
+<section><div class="container">
+  <h2>What happens when construction ends?</h2>
+  <p>Construction is currently estimated to wrap Fall 2026 (per RTC's published schedule, subject to change). Three scenarios for what MP sales look like once it does:</p>
+
+  <div class="chart"><div id="chart-scenarios" style="height:380px"></div>
+    <div class="caption">Recovery projections vs. pre-construction baseline ($29.9k/wk) and current run-rate ($10.1k/wk).</div>
+  </div>
+  <table class="tbl" style="margin-top:14px">
+    <thead><tr>
+      <th>Scenario</th><th>Assumed plaza visits</th><th>Assumed capture rate</th><th>Projected $/wk</th><th>vs. Pre-construction</th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="pill good">Optimistic</span> Full capture recovery + 7pp visit boost</td><td>15,670</td><td>$1,357 / 1k</td><td><strong>$21,265</strong></td><td class="pill warn">−29%</td></tr>
+      <tr><td><span class="pill warn">Moderate</span> 60% capture recovery + 4pp visit boost</td><td>15,231</td><td>$1,018 / 1k</td><td><strong>$15,505</strong></td><td class="pill bad">−48%</td></tr>
+      <tr><td><span class="pill bad">Pessimistic</span> No capture recovery, +4pp visits</td><td>15,231</td><td>$725 / 1k</td><td><strong>$11,043</strong></td><td class="pill bad">−63%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <strong>Even our optimistic case projects MP at 71% of pre-construction.</strong> The reasons it can't fully snap back:
+    <ul style="margin:8px 0 0 18px;padding:0">
+      <li><strong>Secular plaza decline.</strong> Sunrise City Plaza was losing 17%/yr before construction started. That trend doesn't pause and won't reverse.</li>
+      <li><strong>Brand awareness erosion.</strong> Search impressions for MP location pages are down 83%. Even if construction ends, rebuilding consideration takes intentional marketing investment over many months.</li>
+      <li><strong>Behavioral inertia.</strong> Customers who stopped visiting during construction develop alternative habits. National data on construction recovery shows partial recapture, rarely full.</li>
+    </ul>
+  </div>
+
+  <div class="callout good">
+    <strong>What could move us toward the optimistic case.</strong>
+    <ul style="margin:8px 0 0 18px;padding:0">
+      <li>Targeted re-engagement campaign timed to construction completion (paid + organic).</li>
+      <li>Repeat-customer winback (the 2024 customer file — they're the easiest to bring back).</li>
+      <li>UNLV partnership / student promo — the area is anchored by UNLV; a deliberate campus push exploits the captive audience.</li>
+      <li>Visible signage and "we're open" messaging starting before construction ends (during the wind-down phase).</li>
+    </ul>
+  </div>
+</div></section>
+
+<section><div class="container">
+  <h2>Methodology &amp; data sources</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Inputs</h3>
+      <ul style="margin:0;padding-left:18px;font-size:14px">
+        <li>Ops Reporting workbooks 2024, 2025, 2026 (daily POS by location)</li>
+        <li>Placer.ai weekly visits to Sunrise City Plaza, plus 2023–2025 annual totals</li>
+        <li>96 RTC Maryland Parkway weekly construction PDFs (Aug 2024 – May 2026), OCR'd in-sandbox via tesseract</li>
+        <li>Google Analytics 4 — MP page-path traffic via Windsor.ai</li>
+        <li>Google Search Console — MP page queries, impressions, clicks via Windsor.ai</li>
+        <li>Google Ads — Las Vegas account (MP-specific, Town Square, and shared Las Vegas campaigns)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Method notes</h3>
+      <ul style="margin:0;padding-left:18px;font-size:14px">
+        <li>Benchmark: indexed (vs. each location's 2024 mean) average of DES, FTL, NR, ORL, PF, ST, SW, TS.</li>
+        <li>Construction start detected via single change-point analysis on MP-vs-benchmark weekly index.</li>
+        <li>Intensity score: severity × work-type × exp(−distance/1 mi), summed over events active each week.</li>
+        <li>Capture rate = weekly MP sales ÷ weekly plaza visits × 1000.</li>
+        <li>Windsor.ai 16-month data window limits Google data to Feb 2025 onward.</li>
+        <li>Recovery scenarios assume Fall 2026 completion and use Q1–Q2 2026 plaza visits as the post-construction baseline.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">Caveats</h3>
+  <ul style="font-size:14px;color:var(--muted)">
+    <li>OCR adds noise; the per-event severity classification is approximate.</li>
+    <li>The benchmark assumes peer locations had no idiosyncratic shocks in 2025–2026. Spot-checks indicate they are largely flat.</li>
+    <li>Maryland Parkway and Town Square share several Las Vegas Google Ads campaigns. The MP-attributable spend uses a 50% allocation of shared spend.</li>
+    <li>Google My Business connector has no Maryland Parkway location — call/direction signals are not yet incorporated.</li>
+  </ul>
+</div></section>
+
+<div class="foot">
+  Generated · <span id="genstamp"></span> · Data through May 30, 2026 ·
+  <a href="https://marylandparkway.com/" style="color:inherit">RTC project site</a>
+</div>
+
+<script>
+const D = {"weeks": ["2023-12-25", "2024-01-01", "2024-01-08", "2024-01-15", "2024-01-22", "2024-01-29", "2024-02-05", "2024-02-12", "2024-02-19", "2024-02-26", "2024-03-04", "2024-03-11", "2024-03-18", "2024-03-25", "2024-04-01", "2024-04-08", "2024-04-15", "2024-04-22", "2024-04-29", "2024-05-06", "2024-05-13", "2024-05-20", "2024-05-27", "2024-06-03", "2024-06-10", "2024-06-17", "2024-06-24", "2024-07-01", "2024-07-08", "2024-07-15", "2024-07-22", "2024-07-29", "2024-08-05", "2024-08-12", "2024-08-19", "2024-08-26", "2024-09-02", "2024-09-09", "2024-09-16", "2024-09-23", "2024-09-30", "2024-10-07", "2024-10-14", "2024-10-21", "2024-10-28", "2024-11-04", "2024-11-11", "2024-11-18", "2024-11-25", "2024-12-02", "2024-12-09", "2024-12-16", "2024-12-23", "2024-12-30", "2025-01-06", "2025-01-13", "2025-01-20", "2025-01-27", "2025-02-03", "2025-02-10", "2025-02-17", "2025-02-24", "2025-03-03", "2025-03-10", "2025-03-17", "2025-03-24", "2025-03-31", "2025-04-07", "2025-04-14", "2025-04-21", "2025-04-28", "2025-05-05", "2025-05-12", "2025-05-19", "2025-05-26", "2025-06-02", "2025-06-09", "2025-06-16", "2025-06-23", "2025-06-30", "2025-07-07", "2025-07-14", "2025-07-21", "2025-07-28", "2025-08-04", "2025-08-11", "2025-08-18", "2025-08-25", "2025-09-01", "2025-09-08", "2025-09-15", "2025-09-22", "2025-09-29", "2025-10-06", "2025-10-13", "2025-10-20", "2025-10-27", "2025-11-03", "2025-11-10", "2025-11-17", "2025-11-24", "2025-12-01", "2025-12-08", "2025-12-15", "2025-12-22", "2025-12-29", "2026-01-05", "2026-01-12", "2026-01-19", "2026-01-26", "2026-02-02", "2026-02-09", "2026-02-16", "2026-02-23", "2026-03-02", "2026-03-09", "2026-03-16", "2026-03-23", "2026-03-30", "2026-04-06", "2026-04-13", "2026-04-20", "2026-04-27", "2026-05-04", "2026-05-11", "2026-05-18", "2026-05-25"], "mp_sales": [0.0, 41557.03, 31333.37, 26556.18, 28900.59, 24293.24, 21368.22, 31908.78, 30989.39, 33475.75, 30323.25, 49418.51, 29197.95, 41957.03, 32629.18, 21049.37, 30937.2, 25268.07, 21986.06, 20043.21, 19761.3, 26723.54, 23540.69, 31082.48, 25508.06, 35799.43, 41581.87, 39141.35, 42523.72, 42981.18, 38297.22, 34812.054, 29607.13, 24074.9, 24400.03, 26173.83, 21647.94, 18461.86, 23229.72, 28038.56, 22087.66, 27995.58, 33901.6, 26679.55, 22823.09, 28911.4, 28490.82, 17635.19, 56372.12, 11598.24, 19865.67, 27913.19, 60787.87, 63086.5, 26522.76, 30895.1, 27437.23, 29852.06, 24070.97, 33349.28, 28815.6, 23329.57, 25461.07, 33498.7, 42000.19, 26658.23, 35917.8, 22765.15, 24968.46, 31651.26, 21937.35, 17845.55, 26583.41, 20833.52, 27604.06, 18343.68, 25511.25, 27060.2, 32482.4, 28291.06, 31381.59, 30147.18, 28708.15, 30517.37, 29133.21, 26600.11, 21767.1, 20427.88, 25514.84, 19070.89, 26203.36, 20604.1, 20614.82, 17280.02, 20982.73, 14347.57, 16168.49, 17908.59, 25246.08, 13405.79, 37571.12, 12542.76, 7464.89, 12405.28, 39532.09, 24769.96, 10334.43, 10648.54, 13593.61, 7993.33, 8345.76, 12686.39, 10640.28, 10289.75, 9382.71, 11394.71, 15078.75, 13069.75, 10688.71, 10458.22, 6471.7, 8555.5, 7928.48, 9129.91, 8663.01, 10783.81, 10152.76], "bench_avg_sales": [0.0, 54226.09, 38485.411, 38125.175, 35238.841, 32773.226, 33418.79, 47656.551, 47179.738, 38108.946, 41888.386, 56757.848, 55451.438, 66049.386, 58870.67, 39406.704, 37950.049, 36901.671, 33404.046, 37476.253, 42917.754, 47577.324, 56244.075, 56241.574, 61220.039, 66438.976, 66612.021, 71382.436, 71380.409, 71142.729, 73265.121, 67557.225, 63749.572, 49662.254, 41675.424, 37452.191, 39325.116, 33701.15, 38049.323, 37099.829, 36767.743, 43500.688, 45105.269, 36728.908, 36270.168, 35953.031, 37778.46, 32994.885, 62568.277, 33220.324, 37892.607, 43025.791, 86140.34, 89227.869, 41171.701, 43040.338, 45088.743, 35502.1, 36317.056, 43637.775, 51676.688, 39850.899, 43252.818, 56299.145, 70683.126, 61072.445, 52046.42, 48670.296, 56758.332, 48487.346, 39895.331, 42142.746, 43493.193, 48391.236, 63363.253, 62047.397, 69574.351, 80102.628, 77385.986, 78760.995, 74153.984, 77623.452, 75924.421, 75709.181, 73394.685, 59091.669, 51100.094, 46813.535, 41428.536, 35813.096, 42709.277, 44464.624, 41843.27, 56080.34, 51773.106, 41095.915, 38251.757, 41846.614, 45020.996, 35790.435, 70497.234, 34145.98, 39358.731, 45428.03, 82750.416, 57561.179, 23940.41, 26670.666, 23525.48, 22069.658, 19192.752, 26496.556, 30643.374, 23194.234, 22910.985, 29223.607, 42426.276, 31327.604, 36473.554, 37933.67, 22788.958, 23875.67, 21962.149, 23299.101, 23071.661, 28511.349, 30481.893], "mp_index": [0.0, 1.361, 1.026, 0.869, 0.946, 0.795, 0.7, 1.045, 1.015, 1.096, 0.993, 1.618, 0.956, 1.374, 1.068, 0.689, 1.013, 0.827, 0.72, 0.656, 0.647, 0.875, 0.771, 1.018, 0.835, 1.172, 1.361, 1.282, 1.392, 1.407, 1.254, 1.14, 0.969, 0.788, 0.799, 0.857, 0.709, 0.604, 0.761, 0.918, 0.723, 0.917, 1.11, 0.874, 0.747, 0.947, 0.933, 0.577, 1.846, 0.38, 0.65, 0.914, 1.99, 2.066, 0.868, 1.012, 0.898, 0.977, 0.788, 1.092, 0.943, 0.764, 0.834, 1.097, 1.375, 0.873, 1.176, 0.745, 0.818, 1.036, 0.718, 0.584, 0.87, 0.682, 0.904, 0.601, 0.835, 0.886, 1.064, 0.926, 1.027, 0.987, 0.94, 0.999, 0.954, 0.871, 0.713, 0.669, 0.835, 0.624, 0.858, 0.675, 0.675, 0.566, 0.687, 0.47, 0.529, 0.586, 0.827, 0.439, 1.23, 0.411, 0.244, 0.406, 1.294, 0.811, 0.338, 0.349, 0.445, 0.262, 0.273, 0.415, 0.348, 0.337, 0.307, 0.373, 0.494, 0.428, 0.35, 0.342, 0.212, 0.28, 0.26, 0.299, 0.284, 0.353, 0.332], "bench_index": [0.0, 1.105, 0.773, 0.755, 0.697, 0.652, 0.681, 0.975, 0.94, 0.766, 0.849, 1.136, 1.166, 1.425, 1.229, 0.81, 0.772, 0.756, 0.67, 0.775, 0.901, 0.959, 1.176, 1.171, 1.276, 1.395, 1.429, 1.508, 1.535, 1.539, 1.57, 1.442, 1.302, 1.028, 0.865, 0.754, 0.793, 0.676, 0.78, 0.73, 0.747, 0.897, 0.91, 0.717, 0.71, 0.715, 0.745, 0.646, 1.261, 0.668, 0.746, 0.844, 1.789, 1.844, 0.854, 0.864, 0.91, 0.714, 0.71, 0.877, 1.048, 0.774, 0.869, 1.14, 1.405, 1.29, 1.061, 0.991, 1.156, 0.99, 0.799, 0.861, 0.846, 0.968, 1.289, 1.3, 1.433, 1.638, 1.636, 1.688, 1.569, 1.647, 1.598, 1.596, 1.544, 1.238, 1.061, 0.974, 0.837, 0.697, 0.855, 0.903, 0.838, 1.185, 1.048, 0.809, 0.735, 0.816, 0.867, 0.689, 1.408, 0.677, 0.758, 0.885, 1.663, 1.175, 0.47, 0.537, 0.468, 0.454, 0.384, 0.533, 0.62, 0.461, 0.459, 0.606, 0.893, 0.643, 0.769, 0.795, 0.45, 0.475, 0.443, 0.469, 0.468, 0.577, 0.639], "mp_vs_bench": [0.0, 0.256, 0.253, 0.114, 0.249, 0.143, 0.019, 0.07, 0.074, 0.33, 0.143, 0.482, -0.21, -0.052, -0.16, -0.121, 0.241, 0.072, 0.05, -0.119, -0.254, -0.084, -0.405, -0.153, -0.441, -0.223, -0.068, -0.227, -0.142, -0.132, -0.316, -0.302, -0.333, -0.24, -0.066, 0.103, -0.084, -0.072, -0.019, 0.188, -0.024, 0.02, 0.2, 0.157, 0.037, 0.232, 0.188, -0.069, 0.585, -0.289, -0.095, 0.07, 0.202, 0.221, 0.014, 0.148, -0.012, 0.263, 0.078, 0.215, -0.104, -0.01, -0.035, -0.044, -0.03, -0.417, 0.115, -0.245, -0.339, 0.046, -0.081, -0.277, 0.025, -0.286, -0.385, -0.699, -0.598, -0.752, -0.572, -0.761, -0.542, -0.66, -0.658, -0.597, -0.591, -0.367, -0.349, -0.305, -0.001, -0.072, 0.003, -0.229, -0.163, -0.619, -0.361, -0.34, -0.206, -0.229, -0.041, -0.25, -0.178, -0.267, -0.514, -0.479, -0.369, -0.364, -0.131, -0.188, -0.023, -0.192, -0.111, -0.117, -0.271, -0.124, -0.151, -0.233, -0.399, -0.215, -0.419, -0.453, -0.238, -0.195, -0.184, -0.17, -0.184, -0.224, -0.307], "plaza_visits": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 15420.0, 14723.0, 17496.0, 15477.0, 12551.0, 15619.0, 14169.0, 14655.0, 16375.0, 16239.0, 14683.0, 15543.0, 16958.0, 14968.0, 16580.0, 13984.0, 16839.0, 13479.0, 16038.0, 13840.0, 14000.0, 12666.0, 13006.0, 14403.0, 13867.0, 13411.0, 13453.0, 13659.0, 12297.0, 16325.0, 11577.0, 13077.0, 13585.0, 15376.0, 18937.0, 12159.0, 14436.0, 13340.0, 13457.0, 12032.0, 14553.0, 15702.0, 15252.0, 14719.0, 15484.0, 16202.0, 15913.0, 16041.0, 16548.0, 12600.0, 15886.0, null, null, null, null, null], "mp_per_1k_visits": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1157.299, 1805.57, 1190.759, 1783.554, 1461.531, 1633.347, 1909.817, 2216.472, 1727.698, 1932.483, 2053.203, 1847.015, 1799.585, 1946.366, 1604.349, 1556.572, 1213.129, 1892.933, 1189.106, 1893.306, 1471.721, 1627.571, 1328.619, 1456.831, 1034.656, 1205.614, 1331.197, 1848.311, 1090.168, 2301.447, 1083.421, 570.841, 913.16, 2571.026, 1308.019, 849.941, 737.638, 1019.011, 593.99, 693.63, 871.737, 677.639, 674.649, 637.456, 735.902, 930.672, 821.325, 666.337, 631.993, 513.627, 538.556, null, null, null, null, null], "construction_intensity": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.24, 0.382, 0.33, 0.026, 0.129, 0.369, 0.101, 0.031, 0.223, 0.0, 0.344, 0.561, 0.361, 0.041, 0.451, 0.019, 0.0, 0.126, 0.113, 0.18, 0.071, 0.0, 0.03, 0.028, 0.433, 0.142, 0.301, 0.033, 0.006, 0.117, 0.284, 0.0, 0.067, 0.014, 0.014, 0.0, 0.062, 0.166, 0.924, 0.003, 0.05, 0.11, 0.014, 0.081, 0.393, 0.811, 0.501, 0.284, 0.041, 0.032, 0.106, 0.181, 0.335, 0.08, 0.018, 0.125, 0.506, 0.248, 0.096, 0.029, 0.169, 0.105, 0.148, 0.0, 0.214, 0.125, 0.088, 0.096, 0.121, 0.0, 0.016, 0.035, 0.114, 0.053, 0.0, 0.104, 0.537, 0.088, 0.27, 0.277, 0.234, 0.026, 0.124, 0.104, 0.077, 0.269, 0.189, 0.256, 0.048, 0.071, 0.045, 0.063, 0.111, 0.042, 0.059, 0.274], "intensity_4wk": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06, 0.155, 0.238, 0.244, 0.217, 0.214, 0.156, 0.158, 0.181, 0.089, 0.15, 0.282, 0.316, 0.327, 0.353, 0.218, 0.128, 0.149, 0.065, 0.105, 0.122, 0.091, 0.07, 0.032, 0.123, 0.158, 0.226, 0.227, 0.12, 0.114, 0.11, 0.102, 0.117, 0.091, 0.024, 0.024, 0.023, 0.061, 0.288, 0.289, 0.286, 0.272, 0.044, 0.064, 0.149, 0.325, 0.446, 0.497, 0.409, 0.215, 0.116, 0.09, 0.164, 0.176, 0.154, 0.14, 0.182, 0.224, 0.244, 0.22, 0.136, 0.1, 0.113, 0.106, 0.117, 0.122, 0.106, 0.13, 0.107, 0.076, 0.058, 0.043, 0.041, 0.055, 0.051, 0.068, 0.174, 0.182, 0.25, 0.293, 0.217, 0.202, 0.165, 0.122, 0.083, 0.143, 0.16, 0.198, 0.191, 0.141, 0.105, 0.057, 0.073, 0.065, 0.069, 0.122], "cumulative_intensity": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.382, 0.712, 0.738, 0.867, 1.236, 1.337, 1.368, 1.592, 1.592, 1.936, 2.497, 2.857, 2.898, 3.349, 3.368, 3.368, 3.495, 3.607, 3.787, 3.858, 3.858, 3.888, 3.917, 4.349, 4.491, 4.792, 4.825, 4.831, 4.948, 5.232, 5.232, 5.299, 5.313, 5.327, 5.327, 5.39, 5.556, 6.48, 6.482, 6.532, 6.642, 6.656, 6.737, 7.13, 7.941, 8.442, 8.726, 8.766, 8.799, 8.905, 9.086, 9.421, 9.501, 9.52, 9.645, 10.15, 10.399, 10.495, 10.524, 10.692, 10.798, 10.946, 10.946, 11.16, 11.284, 11.372, 11.467, 11.588, 11.588, 11.604, 11.639, 11.753, 11.807, 11.807, 11.911, 12.448, 12.536, 12.806, 13.083, 13.316, 13.343, 13.466, 13.57, 13.647, 13.916, 14.105, 14.362, 14.41, 14.481, 14.526, 14.589, 14.701, 14.743, 14.801, 15.076], "intensity_lt_0_5mi": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.189, 0.33, 0.33, 0.0, 0.0, 0.0, 0.0, 0.0, 0.189, 0.0, 0.283, 0.519, 0.189, 0.0, 0.0, 0.0, 0.0, 0.11, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.212, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.114, 0.799, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.094, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.33, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.228], "intensity_0_5_to_1mi": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.051, 0.051, 0.0, 0.0, 0.0, 0.205, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.158, 0.0, 0.435, 0.0, 0.0, 0.0, 0.093, 0.18, 0.0, 0.0, 0.0, 0.0, 0.051, 0.103, 0.215, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.051, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.111, 0.0, 0.0, 0.103, 0.466, 0.154, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.147, 0.0, 0.0, 0.0, 0.045, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.024, 0.103, 0.0, 0.221, 0.045, 0.111, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.045, 0.111, 0.0, 0.0, 0.0], "intensity_1_to_2mi": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.036, 0.143, 0.035, 0.0, 0.019, 0.0, 0.019, 0.016, 0.0, 0.0, 0.0, 0.019, 0.0, 0.016, 0.0, 0.0, 0.071, 0.0, 0.016, 0.028, 0.382, 0.0, 0.032, 0.033, 0.0, 0.089, 0.072, 0.0, 0.0, 0.0, 0.0, 0.0, 0.062, 0.036, 0.0, 0.0, 0.016, 0.016, 0.0, 0.081, 0.361, 0.751, 0.501, 0.284, 0.041, 0.032, 0.032, 0.016, 0.158, 0.0, 0.0, 0.0, 0.032, 0.0, 0.049, 0.016, 0.049, 0.045, 0.0, 0.0, 0.067, 0.125, 0.0, 0.0, 0.0, 0.0, 0.016, 0.0, 0.073, 0.041, 0.0, 0.032, 0.104, 0.0, 0.038, 0.175, 0.122, 0.019, 0.012, 0.0, 0.019, 0.25, 0.182, 0.216, 0.041, 0.038, 0.038, 0.0, 0.0, 0.0, 0.0, 0.0], "intensity_gt_2mi": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.026, 0.093, 0.021, 0.066, 0.031, 0.015, 0.0, 0.042, 0.026, 0.014, 0.041, 0.016, 0.0, 0.0, 0.0, 0.019, 0.0, 0.0, 0.0, 0.014, 0.0, 0.0, 0.039, 0.053, 0.0, 0.006, 0.028, 0.0, 0.0, 0.067, 0.014, 0.014, 0.0, 0.0, 0.016, 0.074, 0.003, 0.034, 0.094, 0.014, 0.0, 0.032, 0.06, 0.0, 0.0, 0.0, 0.0, 0.074, 0.165, 0.066, 0.08, 0.018, 0.022, 0.007, 0.0, 0.047, 0.013, 0.12, 0.061, 0.148, 0.0, 0.0, 0.0, 0.088, 0.096, 0.076, 0.0, 0.0, 0.035, 0.041, 0.013, 0.0, 0.048, 0.0, 0.088, 0.011, 0.057, 0.0, 0.007, 0.112, 0.104, 0.058, 0.018, 0.007, 0.041, 0.007, 0.033, 0.007, 0.018, 0.0, 0.042, 0.059, 0.046], "ga4_sessions": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 943.0, 2074.0, 2624.0, 2322.0, 2281.0, 2831.0, 3459.0, 3321.0, 936.0, 2216.0, 1083.0, 7739.0, 4414.0, 3804.0, 4197.0, 3849.0, 5008.0, 4404.0, 3535.0, 4234.0, 4380.0, 2651.0, 2332.0, 2489.0, 2617.0, 2444.0, 2470.0, 2344.0, 2323.0, 2738.0, 2835.0, 2248.0, 2156.0, 2417.0, 2160.0, 2160.0, 2518.0, 2688.0, 2202.0, 1976.0, 2058.0, 2221.0, 2466.0, 3160.0, 2304.0, 1518.0, 1772.0, 2816.0, 4473.0, 2731.0, 2211.0, 2319.0, 2207.0, 2386.0, 2990.0, 2941.0, 1972.0, 1657.0, 1841.0, 2325.0, 2099.0, 1827.0, 1962.0, 1387.0, 1509.0, 1230.0, 1273.0, 1213.0, 1466.0, 1192.0], "ga4_users": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 803.0, 1787.0, 2269.0, 2012.0, 1966.0, 2472.0, 2925.0, 2792.0, 809.0, 1917.0, 933.0, 6095.0, 3293.0, 2955.0, 3222.0, 3030.0, 3837.0, 3338.0, 2713.0, 3166.0, 3366.0, 2237.0, 1996.0, 2162.0, 2247.0, 2103.0, 2107.0, 1977.0, 1969.0, 2353.0, 2452.0, 1904.0, 1852.0, 2107.0, 1903.0, 1881.0, 2274.0, 2378.0, 1978.0, 1787.0, 1831.0, 1974.0, 2277.0, 2777.0, 2077.0, 1340.0, 1566.0, 2493.0, 4032.0, 2484.0, 1891.0, 2046.0, 1909.0, 1999.0, 2514.0, 2574.0, 1734.0, 1452.0, 1625.0, 2081.0, 1850.0, 1605.0, 1730.0, 1251.0, 1373.0, 1073.0, 1111.0, 1046.0, 1278.0, 1055.0], "ga4_conversions": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 41.0, 63.0, 112.0, 71.0, 76.0, 94.0, 115.0, 147.0, 29.0, 87.0, 34.0, 51.0, 76.0, 58.0, 67.0, 49.0, 69.0, 56.0, 58.0, 78.0, 80.0, 82.0, 90.0, 95.0, 107.0, 92.0, 99.0, 105.0, 88.0, 28.0, 156.0, 140.0, 132.0, 142.0, 88.0, 126.0, 58.0, 82.0, 55.0, 66.0, 60.0, 70.0, 48.0, 100.0, 42.0, 26.0, 52.0, 108.0, 129.0, 55.0, 50.0, 57.0, 39.0, 47.0, 90.0, 67.0, 55.0, 51.0, 71.0, 82.0, 50.0, 58.0, 53.0, 47.0, 45.0, 50.0, 42.0, 46.0, 53.0, 37.0], "sc_clicks": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 98.0, 236.0, 280.0, 201.0, 244.0, 321.0, 399.0, 424.0, 309.0, 323.0, 278.0, 268.0, 258.0, 156.0, 108.0, 164.0, 206.0, 272.0, 201.0, 252.0, 247.0, 390.0, 281.0, 253.0, 358.0, 297.0, 292.0, 193.0, 184.0, 145.0, 196.0, 102.0, 42.0, 59.0, 96.0, 188.0, 128.0, 63.0, 37.0, 37.0, 51.0, 54.0, 51.0, 51.0, 31.0, 20.0, 36.0, 134.0, 325.0, 250.0, 228.0, 209.0, 174.0, 186.0, 330.0, 226.0, 209.0, 147.0, 155.0, 201.0, 174.0, 193.0, 188.0, 156.0, 165.0, 139.0, 164.0, 157.0, 226.0, 123.0], "sc_impressions": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 11005.0, 25449.0, 24987.0, 26276.0, 24699.0, 28782.0, 32282.0, 31885.0, 38835.0, 39781.0, 27199.0, 35309.0, 40074.0, 40760.0, 27172.0, 23060.0, 28779.0, 31846.0, 29963.0, 34096.0, 31024.0, 37500.0, 44278.0, 41668.0, 41553.0, 45371.0, 48615.0, 46779.0, 39546.0, 37016.0, 40772.0, 33926.0, 21181.0, 18892.0, 18585.0, 25817.0, 24907.0, 19912.0, 16002.0, 13936.0, 13355.0, 18221.0, 16127.0, 19740.0, 15287.0, 16087.0, 15591.0, 20203.0, 25875.0, 7922.0, 10185.0, 7720.0, 7622.0, 7708.0, 9111.0, 8673.0, 8302.0, 8957.0, 5275.0, 7005.0, 7090.0, 6668.0, 5789.0, 4921.0, 5254.0, 4578.0, 5169.0, 4235.0, 5815.0, 3545.0], "sc_avg_position": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 25.337, 25.068, 28.629, 25.885, 24.916, 23.947, 22.072, 22.708, 22.27, 26.073, 28.236, 29.145, 30.019, 29.566, 30.538, 31.435, 31.372, 25.711, 28.231, 24.441, 18.954, 22.308, 24.752, 25.528, 24.916, 23.09, 21.722, 25.382, 24.827, 22.178, 16.731, 22.689, 18.627, 10.063, 7.895, 8.607, 8.139, 10.334, 7.892, 8.278, 7.836, 8.056, 8.502, 8.935, 7.979, 9.099, 8.67, 9.705, 10.457, 11.257, 11.342, 13.918, 11.996, 10.232, 9.821, 10.842, 10.398, 10.289, 13.078, 10.815, 12.972, 10.013, 10.964, 13.102, 11.382, 13.249, 13.3, 12.28, 10.14, 14.682], "gads_mp_spend": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 21.064, 41.806, 62.236, 25.863, 75.745, 69.008, 43.522, 54.778, 56.712, 42.202, 50.134, 64.878, 108.762, 37.242, 55.963, 71.446, 62.87, 54.511, 131.375, 89.584, 78.443, 97.635, 78.367, 74.612, 36.883, 79.265, 53.594, 38.928, 3.863, 4.55, 8.563, 0.05, 19.112, 21.497, 25.778, 1.543, 2.848, 7.962, 1.84, 4.86, 27.057, 15.441, 16.67, 30.837, 23.235, 10.613, 27.706, 22.966, 17.59, 22.092, 17.213, 17.103, 22.677, 18.225, 30.253, 21.316, 18.795, 12.055, 29.648, 23.377, 18.008, 10.77, 28.884, 21.746, 22.93, 18.479, 17.417, 23.633, 21.494, 17.023], "gads_shared_spend": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 321.911, 1028.893, 977.357, 960.575, 855.859, 899.86, 904.587, 832.05, 801.375, 945.881, 983.941, 921.502, 907.655, 874.755, 881.577, 798.641, 901.514, 814.09, 1140.832, 1263.549, 1254.552, 1095.544, 875.068, 1209.893, 806.048, 817.942, 1371.172, 1051.817, 1495.28, 1194.307, 1311.945, 1304.908, 1029.632, 1047.639, 1026.544, 1032.744, 1352.603, 1341.697, 1158.898, 1115.697, 1161.782, 1162.21, 1074.247, 1139.9, 1073.354, 1055.425, 1402.441, 2286.822, 2268.809, 1232.36, 1095.948, 1092.276, 1034.763, 1041.002, 1292.017, 1117.695, 1099.448, 1523.236, 1600.142, 1827.901, 1597.779, 1730.983, 1828.188, 1108.348, 1078.633, 1061.59, 1080.507, 1102.42, 1516.688, 1161.756], "gads_mp_conv": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.0, 1.0, 9.0, 0.246, 13.0, 6.0, 8.949, 3.0, 2.0, 4.605, 5.0, 1.671, 0.645, 4.0, 2.991, 3.0, 3.411, 0.0, 5.803, 0.0, 0.825, 0.0, 0.946, 0.0, 1.0, 1.0, 0.0, 3.0, 1.956, 0.0, 2.0, 0.0, 2.0, 2.579, 2.013, 0.0, 0.0, 0.0, 0.0, 1.0, 2.812, 0.89, 1.0, 3.536, 1.0, 0.0, 0.0, 2.0, 3.0, 1.557, 0.777, 0.572, 1.587, 1.587, 2.378, 1.0, 4.596, 0.0, 3.962, 0.795, 2.0, 0.5, 1.0, 2.047, 1.0, 2.291, 4.725, 0.518, 0.748, 1.438], "gads_shared_conv": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 26.073, 66.693, 328.081, 324.587, 277.558, 242.498, 284.895, 417.793, 175.261, 149.306, 165.227, 214.921, 235.134, 137.724, 168.361, 52.643, 57.775, 61.532, 70.313, 67.258, 64.751, 85.957, 68.317, 89.683, 49.323, 51.377, 51.055, 65.594, 77.844, 36.584, 65.694, 67.852, 48.114, 52.217, 78.876, 41.256, 53.653, 58.945, 58.62, 68.309, 59.513, 73.141, 46.498, 93.543, 45.484, 58.318, 75.543, 95.418, 113.589, 48.924, 77.557, 68.838, 55.31, 49.828, 66.33, 65.787, 53.637, 69.647, 77.345, 79.822, 68.864, 72.205, 55.05, 61.062, 66.138, 73.178, 77.535, 70.458, 69.776, 49.467], "quarterly": [{"quarter": "2023Q4", "mp_sales": 0.0, "bench_avg": 0.0, "mp_vs_bench": 0.0, "plaza": NaN, "intensity": 0.0, "cumulative": 0.0, "ga4_sessions": NaN, "sc_impressions": NaN, "capture": NaN}, {"quarter": "2024Q1", "mp_sales": 32406.1, "bench_avg": 45027.7, "mp_vs_bench": 0.1, "plaza": NaN, "intensity": 0.0, "cumulative": 0.0, "ga4_sessions": NaN, "sc_impressions": NaN, "capture": NaN}, {"quarter": "2024Q2", "mp_sales": 27377.7, "bench_avg": 49327.8, "mp_vs_bench": -0.1, "plaza": NaN, "intensity": 0.0, "cumulative": 0.0, "ga4_sessions": NaN, "sc_impressions": NaN, "capture": NaN}, {"quarter": "2024Q3", "mp_sales": 29676.9, "bench_avg": 52300.8, "mp_vs_bench": -0.1, "plaza": NaN, "intensity": 0.1, "cumulative": 1.6, "ga4_sessions": NaN, "sc_impressions": NaN, "capture": NaN}, {"quarter": "2024Q4", "mp_sales": 32773.9, "bench_avg": 47723.6, "mp_vs_bench": 0.1, "plaza": NaN, "intensity": 0.2, "cumulative": 3.9, "ga4_sessions": NaN, "sc_impressions": NaN, "capture": NaN}, {"quarter": "2025Q1", "mp_sales": 29831.4, "bench_avg": 47664.6, "mp_vs_bench": 0.0, "plaza": NaN, "intensity": 0.1, "cumulative": 5.3, "ga4_sessions": 2300.7, "sc_impressions": 28398.1, "capture": NaN}, {"quarter": "2025Q2", "mp_sales": 25067.5, "bench_avg": 58390.2, "mp_vs_bench": -0.4, "plaza": 15165.0, "intensity": 0.3, "cumulative": 8.8, "ga4_sessions": 3971.5, "sc_impressions": 33158.5, "capture": 1654.0}, {"quarter": "2025Q3", "mp_sales": 25437.7, "bench_avg": 56928.4, "mp_vs_bench": -0.3, "plaza": 15062.8, "intensity": 0.2, "cumulative": 10.8, "ga4_sessions": 2415.5, "sc_impressions": 35363.2, "capture": 1694.4}, {"quarter": "2025Q4", "mp_sales": 19971.2, "bench_avg": 49200.1, "mp_vs_bench": -0.3, "plaza": 14074.8, "intensity": 0.1, "cumulative": 11.8, "ga4_sessions": 2474.8, "sc_impressions": 18095.6, "capture": 1387.9}, {"quarter": "2026Q1", "mp_sales": 11088.2, "bench_avg": 27545.8, "mp_vs_bench": -0.2, "plaza": 14560.8, "intensity": 0.2, "cumulative": 14.4, "ga4_sessions": 2269.7, "sc_impressions": 7864.5, "capture": 762.3}, {"quarter": "2026Q2", "mp_sales": 9017.9, "bench_avg": 26490.6, "mp_vs_bench": -0.2, "plaza": 15011.3, "intensity": 0.1, "cumulative": 15.1, "ga4_sessions": 1404.0, "sc_impressions": 4913.2, "capture": 561.4}], "scenarios": [{"scenario": "Optimistic (full capture recovery + 7pp visit boost)", "projected_weekly_sales": 21264.8, "projected_weekly_visits": 15670.4, "assumed_capture_per_1k_visits": 1357, "pre_construction_weekly_baseline": 29892.9, "current_weekly_sales": 10135.2, "pct_vs_pre_construction": -28.9}, {"scenario": "Moderate (60% capture recovery + 4pp visit boost)", "projected_weekly_sales": 15505.2, "projected_weekly_visits": 15231.1, "assumed_capture_per_1k_visits": 1018, "pre_construction_weekly_baseline": 29892.9, "current_weekly_sales": 10135.2, "pct_vs_pre_construction": -48.1}, {"scenario": "Pessimistic (no capture recovery, +4pp visits)", "projected_weekly_sales": 11042.5, "projected_weekly_visits": 15231.1, "assumed_capture_per_1k_visits": 725, "pre_construction_weekly_baseline": 29892.9, "current_weekly_sales": 10135.2, "pct_vs_pre_construction": -63.1}], "decomposition": {"plaza_2023": 1225603, "plaza_2024": 1015207, "plaza_2025": 779970, "plaza_2025_expected_secular": 840591, "mp_sales_2024": 1565554, "mp_sales_2025": 1340423, "baseline_decline_pp": 17.2, "construction_decline_pp": 7.2}};
+document.getElementById('genstamp').textContent = new Date().toISOString().slice(0,10);
+
+const LAYOUT_BASE = {
+  margin:{l:55,r:25,t:30,b:50},
+  font:{family:'-apple-system,Segoe UI,sans-serif',size:12,color:'#0e1726'},
+  paper_bgcolor:'#fff', plot_bgcolor:'#fff',
+  xaxis:{gridcolor:'#eef0f4',linecolor:'#dde2ea',type:'date'},
+  yaxis:{gridcolor:'#eef0f4',linecolor:'#dde2ea',zeroline:false},
+  legend:{orientation:'h',y:1.12,x:0,xanchor:'left'},
+  shapes:[{type:'line',x0:'2025-05-19',x1:'2025-05-19',yref:'paper',y0:0,y1:1,line:{color:'#c4302b',width:1,dash:'dash'}}],
+  annotations:[{x:'2025-05-19',y:1,yref:'paper',text:'Construction breakpoint',showarrow:false,bgcolor:'#fff',font:{color:'#c4302b',size:11},xanchor:'left',yanchor:'top'}]
+};
+
+function clone(o){return JSON.parse(JSON.stringify(o));}
+
+// Chart 1: Decomposition (2024 trend vs 2025 actual)
+Plotly.newPlot('chart-decomp',[
+  {x:['2023','2024','2025 expected (trend)','2025 actual'], y:[1225603,1015207,840591,779970],
+    type:'bar', marker:{color:['#9aa3b2','#9aa3b2','#0b69ff','#c4302b']},
+    text:['1.23M','1.02M','841k','780k'], textposition:'outside'}
+],{...LAYOUT_BASE, shapes:[], annotations:[
+  {x:'2025 actual', y:779970, text:'−7.2 pp construction', showarrow:true, arrowhead:3, ax:-60, ay:-40, bgcolor:'#fdecec', font:{color:'#c4302b'}},
+  {x:'2025 expected (trend)', y:840591, text:'−17.2 pp secular trend', showarrow:true, arrowhead:3, ax:60, ay:-40, bgcolor:'#fff4e0', font:{color:'#b25a00'}}
+], yaxis:{...LAYOUT_BASE.yaxis,title:'Plaza visits/yr'}, xaxis:{...LAYOUT_BASE.xaxis,type:'category'}, showlegend:false},{displayModeBar:false,responsive:true});
+
+// Chart 2: MP vs Benchmark sales
+Plotly.newPlot('chart-sales',[
+  {x:D.weeks, y:D.mp_sales, name:'MP weekly sales', mode:'lines', line:{color:'#c4302b',width:2.5}},
+  {x:D.weeks, y:D.bench_avg_sales, name:'Benchmark avg', mode:'lines', line:{color:'#0b69ff',width:2.5,dash:'dot'}}
+],{...clone(LAYOUT_BASE), yaxis:{...LAYOUT_BASE.yaxis,title:'Sales ($/wk)',tickformat:'$,.0f'}},{responsive:true,displayModeBar:false});
+
+// Chart 3: Capture (MP sales vs Plaza visits with dual y)
+Plotly.newPlot('chart-capture',[
+  {x:D.weeks, y:D.mp_sales, name:'MP sales ($/wk)', mode:'lines', line:{color:'#c4302b',width:2.5}, yaxis:'y'},
+  {x:D.weeks, y:D.plaza_visits, name:'Plaza visits (count/wk)', mode:'lines', line:{color:'#0b69ff',width:2}, yaxis:'y2'}
+],{...clone(LAYOUT_BASE),
+   yaxis:{...LAYOUT_BASE.yaxis,title:'MP sales ($/wk)',tickformat:'$,.0f'},
+   yaxis2:{title:'Plaza visits',overlaying:'y',side:'right',gridcolor:'transparent',rangemode:'tozero'}
+},{responsive:true,displayModeBar:false});
+
+// Chart 4: Capture rate
+Plotly.newPlot('chart-capture-rate',[
+  {x:D.weeks, y:D.mp_per_1k_visits, name:'$ MP sales / 1k plaza visits', mode:'lines+markers', line:{color:'#b25a00',width:2.5}, marker:{size:4}}
+],{...clone(LAYOUT_BASE), yaxis:{...LAYOUT_BASE.yaxis,title:'$ / 1k visits',tickformat:'$,.0f'},showlegend:false},{responsive:true,displayModeBar:false});
+
+// Chart 5: Web/SC trend
+Plotly.newPlot('chart-web',[
+  {x:D.weeks, y:D.sc_impressions, name:'SC impressions', mode:'lines', line:{color:'#0b69ff',width:2}, yaxis:'y'},
+  {x:D.weeks, y:D.ga4_sessions, name:'GA4 sessions', mode:'lines', line:{color:'#0e8a4a',width:2}, yaxis:'y2'}
+],{...clone(LAYOUT_BASE),
+   yaxis:{...LAYOUT_BASE.yaxis,title:'SC impressions/wk'},
+   yaxis2:{title:'GA4 sessions/wk',overlaying:'y',side:'right',gridcolor:'transparent'}
+},{responsive:true,displayModeBar:false});
+
+// Chart 6: Construction intensity vs sales
+Plotly.newPlot('chart-intensity',[
+  {x:D.weeks, y:D.mp_sales, name:'MP sales ($/wk)', mode:'lines', line:{color:'#c4302b',width:2.5}, yaxis:'y'},
+  {x:D.weeks, y:D.intensity_4wk, name:'Construction intensity (4-wk avg)', mode:'lines', line:{color:'#b25a00',width:2}, fill:'tozeroy', fillcolor:'rgba(178,90,0,0.10)', yaxis:'y2'}
+],{...clone(LAYOUT_BASE),
+   yaxis:{...LAYOUT_BASE.yaxis,title:'MP sales ($/wk)',tickformat:'$,.0f'},
+   yaxis2:{title:'Intensity score',overlaying:'y',side:'right',gridcolor:'transparent',rangemode:'tozero'}
+},{responsive:true,displayModeBar:false});
+
+// Chart 7: Intensity by proximity
+Plotly.newPlot('chart-intensity-prox',[
+  {x:D.weeks, y:D.intensity_lt_0_5mi, stackgroup:'one', name:'<0.5 mi', mode:'lines', line:{width:0}, fillcolor:'rgba(196,48,43,0.75)'},
+  {x:D.weeks, y:D.intensity_0_5_to_1mi, stackgroup:'one', name:'0.5–1 mi', mode:'lines', line:{width:0}, fillcolor:'rgba(178,90,0,0.75)'},
+  {x:D.weeks, y:D.intensity_1_to_2mi, stackgroup:'one', name:'1–2 mi', mode:'lines', line:{width:0}, fillcolor:'rgba(11,105,255,0.55)'},
+  {x:D.weeks, y:D.intensity_gt_2mi, stackgroup:'one', name:'>2 mi', mode:'lines', line:{width:0}, fillcolor:'rgba(154,163,178,0.5)'}
+],{...clone(LAYOUT_BASE), yaxis:{...LAYOUT_BASE.yaxis,title:'Intensity contribution'}},{responsive:true,displayModeBar:false});
+
+// Chart 8: Cumulative intensity
+Plotly.newPlot('chart-cumulative',[
+  {x:D.weeks, y:D.cumulative_intensity, name:'Cumulative intensity', mode:'lines', line:{color:'#b25a00',width:2.5}, fill:'tozeroy', fillcolor:'rgba(178,90,0,0.15)'}
+],{...clone(LAYOUT_BASE), yaxis:{...LAYOUT_BASE.yaxis,title:'Cumulative since Aug 2024'},showlegend:false},{responsive:true,displayModeBar:false});
+
+// Chart 9: Scenarios
+const sc = D.scenarios; const pre = sc[0].pre_construction_weekly_baseline; const cur = sc[0].current_weekly_sales;
+Plotly.newPlot('chart-scenarios',[
+  {x:['Pre-construction','Current (Q1–Q2 2026)','Pessimistic','Moderate','Optimistic'],
+   y:[pre, cur, sc[2].projected_weekly_sales, sc[1].projected_weekly_sales, sc[0].projected_weekly_sales],
+   type:'bar',
+   marker:{color:['#9aa3b2','#c4302b','#c4302b','#b25a00','#0e8a4a']},
+   text:[`$${(pre/1000).toFixed(1)}k`,`$${(cur/1000).toFixed(1)}k`,`$${(sc[2].projected_weekly_sales/1000).toFixed(1)}k`,`$${(sc[1].projected_weekly_sales/1000).toFixed(1)}k`,`$${(sc[0].projected_weekly_sales/1000).toFixed(1)}k`],
+   textposition:'outside'}
+],{...clone(LAYOUT_BASE), shapes:[{type:'line',x0:-0.5,x1:4.5,y0:pre,y1:pre,line:{color:'#9aa3b2',width:1,dash:'dot'}}],
+   annotations:[{x:4.5,y:pre,text:'Pre-construction baseline',showarrow:false,xanchor:'right',font:{color:'#9aa3b2',size:11}}],
+   yaxis:{...LAYOUT_BASE.yaxis,title:'MP sales ($/wk)',tickformat:'$,.0f',range:[0,35000]},
+   xaxis:{...LAYOUT_BASE.xaxis,type:'category'},
+   showlegend:false},{responsive:true,displayModeBar:false});
+
+// Quarterly table
+const qt = document.getElementById('qtbody');
+D.quarterly.forEach(r=>{
+  if(!r.mp_sales) return;
+  const tr = document.createElement('tr');
+  const f = (v,p=0)=> v==null?'—':(typeof v==='number'?v.toLocaleString(undefined,{maximumFractionDigits:p}):v);
+  const m = (v)=> v==null?'—':((v*100).toFixed(1)+'%');
+  tr.innerHTML = `<td>${r.quarter}</td>
+    <td>$${f(r.mp_sales)}</td>
+    <td>$${f(r.bench_avg)}</td>
+    <td>${m(r.mp_vs_bench)}</td>
+    <td>${f(r.plaza)}</td>
+    <td>${f(r.ga4_sessions)}</td>
+    <td>$${f(r.capture)}</td>
+    <td>${f(r.intensity,2)}</td>`;
+  qt.appendChild(tr);
+});
+</script>
+</body>
+</html>
